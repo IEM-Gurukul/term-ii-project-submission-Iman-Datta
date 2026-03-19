@@ -2,16 +2,20 @@ package models;
 
 public class Principal extends User {
 
-    // Predefined credentials
-    private static final String DEFAULT_USERNAME = "principal";
-    private static final String DEFAULT_PASSWORD = "admin123";
+    // Default credentials (used when creating first principal)
+    public static final String DEFAULT_USERNAME = "principal";
+    public static final String DEFAULT_PASSWORD = "admin123";
 
-    // Constructor (no need to pass username/password)
+    // Constructor (USED when loading from DB)
+    public Principal(int id, String name, String role, String username, String password) {
+        super(id, name, role, username, password);
+    }
+
+    // Optional constructor (USED when creating default principal)
     public Principal(int id, String name) {
         super(id, name, "principal", DEFAULT_USERNAME, DEFAULT_PASSWORD);
     }
 
-    // Implement abstract method
     @Override
     public void showMenu() {
         System.out.println("----- Principal Menu -----");
