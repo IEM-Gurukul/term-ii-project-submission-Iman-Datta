@@ -17,22 +17,20 @@ public class TeacherService {
         do {
             teacher.showMenu();
             System.out.print("Enter choice: ");
-            choice = scanner.nextInt();
+            choice = Integer.parseInt(scanner.nextLine());   
 
             switch (choice) {
 
                 case 1:
                     // Add Marks
                     System.out.print("Enter Student ID: ");
-                    int studentId = scanner.nextInt();
-
-                    scanner.nextLine(); // clear buffer
+                    int studentId = Integer.parseInt(scanner.nextLine());
 
                     System.out.print("Enter Subject: ");
                     String subject = scanner.nextLine();
 
                     System.out.print("Enter Marks: ");
-                    int marks = scanner.nextInt();
+                    int marks = Integer.parseInt(scanner.nextLine());
 
                     marksDAO.addMarks(studentId, subject, marks, teacher.getId());
                     break;

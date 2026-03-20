@@ -17,7 +17,7 @@ public class StudentService {
         do {
             student.showMenu();
             System.out.print("Enter choice: ");
-            choice = scanner.nextInt();
+            choice = Integer.parseInt(scanner.nextLine());
 
             switch (choice) {
 
