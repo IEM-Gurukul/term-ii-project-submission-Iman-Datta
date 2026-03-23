@@ -20,9 +20,9 @@ The system allows teachers to manage and update marks only for their assigned su
 
 | Role             | Description                                                                    |
 | ---------------- | ------------------------------------------------------------------------------ |
-| 🏫 **Principal** | Single super-admin with full access to all student records across all subjects |
-| 👨‍🏫 **Teacher**   | Can register/login and manage marks only for their assigned subject(s)         |
-| 👨‍🎓 **Student**   | Can register/login and view only their own marks and results                   |
+| **Principal** | Single super-admin with full access to all student records across all subjects |
+| **Teacher**   | Can register/login and manage marks only for their assigned subject(s)         |
+| **Student**   | Can register/login and view only their own marks and results                   |
 
 > **Note:** Only **one Principal** account exists in the system. Teachers and Students can self-register.
 
