@@ -12,26 +12,47 @@ public class StudentService {
 
     public void handleStudent(Student student) {
 
-        int choice;
+        int choice = 0;
 
         do {
-            student.showMenu();
-            System.out.print("Enter choice: ");
-            choice = Integer.parseInt(scanner.nextLine());
+            try {
+                student.showMenu();
+                System.out.print("Enter choice: ");
 
-            switch (choice) {
+                String input = scanner.nextLine();
 
-                case 1:
-                    // View Marks
-                    marksDAO.getMarksByStudent(student.getId());
-                    break;
+                // Validate input
+                if (input.isEmpty()) {
+                    throw new IllegalArgumentException("Input cannot be empty!");
+                }
 
-                case 2:
-                    System.out.println("Logging out...");
-                    break;
+                choice = Integer.parseInt(input);
 
-                default:
-                    System.out.println("Invalid choice!");
+                switch (choice) {
+
+                    case 1:
+                        try {
+                            // View Marks
+                            marksDAO.getMarksByStudent(student.getId());
+                        } catch (Exception e) {
+                            System.out.println("Error fetching marks: " + e.getMessage());
+                        }
+                        break;
+
+                    case 2:
+                        System.out.println("Logging out...");
+                        break;
+
+                    default:
+                        throw new IllegalArgumentException("Invalid choice! Please enter 1 or 2.");
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a valid number!");
+            } catch (IllegalArgumentException e) {
+                System.out.println("Error" + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Unexpected error: " + e.getMessage());
             }
 
         } while (choice != 2);

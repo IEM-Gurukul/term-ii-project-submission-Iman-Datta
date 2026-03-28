@@ -12,35 +12,80 @@ public class TeacherService {
 
     public void handleTeacher(Teacher teacher) {
 
-        int choice;
+        int choice = 0;
 
         do {
-            teacher.showMenu();
-            System.out.print("Enter choice: ");
-            choice = Integer.parseInt(scanner.nextLine());   
+            try {
+                teacher.showMenu();
+                System.out.print("Enter choice: ");
 
-            switch (choice) {
+                String input = scanner.nextLine();
 
-                case 1:
-                    // Add Marks
-                    System.out.print("Enter Student ID: ");
-                    int studentId = Integer.parseInt(scanner.nextLine());
+                if (input.isEmpty()) {
+                    throw new IllegalArgumentException("Choice cannot be empty!");
+                }
 
-                    System.out.print("Enter Subject: ");
-                    String subject = scanner.nextLine();
+                choice = Integer.parseInt(input);
 
-                    System.out.print("Enter Marks: ");
-                    int marks = Integer.parseInt(scanner.nextLine());
+                switch (choice) {
 
-                    marksDAO.addMarks(studentId, subject, marks, teacher.getId());
-                    break;
+                    case 1:
+                        try {
+                            // Add Marks
 
-                case 2:
-                    System.out.println("Logging out...");
-                    break;
+                            System.out.print("Enter Student ID: ");
+                            String studentInput = scanner.nextLine();
 
-                default:
-                    System.out.println("Invalid choice!");
+                            if (studentInput.isEmpty()) {
+                                throw new IllegalArgumentException("Student ID cannot be empty!");
+                            }
+
+                            int studentId = Integer.parseInt(studentInput);
+
+                            System.out.print("Enter Subject: ");
+                            String subject = scanner.nextLine();
+
+                            if (subject.isEmpty()) {
+                                throw new IllegalArgumentException("Subject cannot be empty!");
+                            }
+
+                            System.out.print("Enter Marks: ");
+                            String marksInput = scanner.nextLine();
+
+                            int marks = Integer.parseInt(marksInput);
+
+                            // Logical validation
+                            if (marks < 0 || marks > 100) {
+                                throw new IllegalArgumentException("Marks must be between 0 and 100!");
+                            }
+
+                            marksDAO.addMarks(studentId, subject, marks, teacher.getId());
+
+                            System.out.println("Marks added successfully!");
+
+                        } catch (NumberFormatException e) {
+                            System.out.println("Please enter valid numeric values!");
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("Error" + e.getMessage());
+                        } catch (Exception e) {
+                            System.out.println("Error while adding marks: " + e.getMessage());
+                        }
+                        break;
+
+                    case 2:
+                        System.out.println("Logging out...");
+                        break;
+
+                    default:
+                        throw new IllegalArgumentException("Invalid choice! Please enter 1 or 2.");
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a valid number!");
+            } catch (IllegalArgumentException e) {
+                System.out.println("Error" + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Unexpected error: " + e.getMessage());
             }
 
         } while (choice != 2);
