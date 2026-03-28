@@ -63,9 +63,7 @@ The system allows teachers to manage and update marks only for their assigned su
 The application follows a **layered architecture** with clear separation of concerns:
 
 ```
-┌─────────────────────────────┐
-│         UI Layer            │  Console-based menus per role
-├─────────────────────────────┤
+┌─────────────────────────────┐ 
 │       Service Layer         │  Business logic, role validation, access control
 ├─────────────────────────────┤
 │         DAO Layer           │  Database access objects (CRUD operations)
