@@ -18,70 +18,117 @@ public class Main {
         StudentService studentService = new StudentService();
         TeacherService teacherService = new TeacherService();
 
-        int choice;
+        int choice = 0;
 
         do {
-            System.out.println("\n===== Student Marksheet System =====");
-            System.out.println("1. Register");
-            System.out.println("2. Login");
-            System.out.println("3. Exit");
-            System.out.print("Enter choice: ");
+            try {
+                System.out.println("\n===== Student Marksheet System =====");
+                System.out.println("1. Register");
+                System.out.println("2. Login");
+                System.out.println("3. Exit");
+                System.out.print("Enter choice: ");
 
-            choice = Integer.parseInt(scanner.nextLine());
+                String input = scanner.nextLine();
 
-            switch (choice) {
+                if (input.isEmpty()) {
+                    throw new IllegalArgumentException("Choice cannot be empty");
+                }
 
-                case 1:
-                    // Register
-                    System.out.print("Enter Name: ");
-                    String name = scanner.nextLine();
+                choice = Integer.parseInt(input);
 
-                    System.out.print("Enter Role (student/teacher/principal): ");
-                    String role = scanner.nextLine();
+                switch (choice) {
 
-                    System.out.print("Enter Username: ");
-                    String username = scanner.nextLine();
+                    case 1:
+                        try {
+                            System.out.print("Enter Name: ");
+                            String name = scanner.nextLine();
 
-                    System.out.print("Enter Password: ");
-                    String password = scanner.nextLine();
+                            if (name.isEmpty()) {
+                                throw new IllegalArgumentException("Name cannot be empty");
+                            }
 
-                    userDAO.registerUser(name, role, username, password);
-                    break;
+                            System.out.print("Enter Role (student/teacher/principal): ");
+                            String role = scanner.nextLine().toLowerCase();
 
-                case 2:
-                    // Login
-                    System.out.print("Enter Username: ");
-                    String loginUser = scanner.nextLine();
+                            if (!(role.equals("student") || role.equals("teacher") || role.equals("principal"))) {
+                                throw new IllegalArgumentException("Invalid role entered");
+                            }
 
-                    System.out.print("Enter Password: ");
-                    String loginPass = scanner.nextLine();
+                            System.out.print("Enter Username: ");
+                            String username = scanner.nextLine();
 
-                    User user = userDAO.login(loginUser, loginPass);
+                            if (username.isEmpty()) {
+                                throw new IllegalArgumentException("Username cannot be empty");
+                            }
 
-                    if (user == null) {
-                        System.out.println("Invalid credentials!");
-                    } else {
-                        System.out.println("Welcome " + user.getName());
+                            System.out.print("Enter Password: ");
+                            String password = scanner.nextLine();
 
-                        // Role-based routing
-                        if (user instanceof Student) {
-                            studentService.handleStudent((Student) user);
+                            if (password.isEmpty()) {
+                                throw new IllegalArgumentException("Password cannot be empty");
+                            }
 
-                        } else if (user instanceof Teacher) {
-                            teacherService.handleTeacher((Teacher) user);
+                            userDAO.registerUser(name, role, username, password);
+                            System.out.println("Registration successful");
 
-                        } else if (user instanceof Principal) {
-                            System.out.println("Principal panel coming soon...");
+                        } catch (IllegalArgumentException e) {
+                            System.out.println(e.getMessage());
+                        } catch (Exception e) {
+                            System.out.println("Error during registration: " + e.getMessage());
                         }
-                    }
-                    break;
+                        break;
 
-                case 3:
-                    System.out.println("Exiting system...");
-                    break;
+                    case 2:
+                        try {
+                            System.out.print("Enter Username: ");
+                            String loginUser = scanner.nextLine();
 
-                default:
-                    System.out.println("Invalid choice!");
+                            System.out.print("Enter Password: ");
+                            String loginPass = scanner.nextLine();
+
+                            if (loginUser.isEmpty() || loginPass.isEmpty()) {
+                                throw new IllegalArgumentException("Username or Password cannot be empty");
+                            }
+
+                            User user = userDAO.login(loginUser, loginPass);
+
+                            if (user == null) {
+                                throw new IllegalArgumentException("Invalid credentials");
+                            }
+
+                            System.out.println("Welcome " + user.getName());
+
+                            if (user instanceof Student) {
+                                studentService.handleStudent((Student) user);
+
+                            } else if (user instanceof Teacher) {
+                                teacherService.handleTeacher((Teacher) user);
+
+                            } else if (user instanceof Principal) {
+                                System.out.println("Principal panel coming soon...");
+                            }
+
+                        } catch (IllegalArgumentException e) {
+                            System.out.println(e.getMessage());
+                        } catch (Exception e) {
+                            System.out.println("Error during login: " + e.getMessage());
+                        }
+                        break;
+
+                    case 3:
+                        System.out.println("Exiting system");
+                        break;
+
+                    default:
+                        throw new IllegalArgumentException("Invalid choice. Enter 1, 2 or 3");
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number");
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Unexpected error: " + e.getMessage());
             }
 
         } while (choice != 3);
